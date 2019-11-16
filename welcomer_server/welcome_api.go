@@ -16,20 +16,19 @@ func GettingInEndpoint (w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "OK"); err != nil {
 		log.Fatal("Error in Response")
 	}
-
-
+	log.Print("In")
 }
 
 func GettingOutEndpoint (w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "OK"); err != nil {
 		log.Fatal("Error in Response")
 	}
-
+	log.Print("Out")
 }
 
 func DoorOpenedEndpoint (w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "OK"); err != nil {
 		log.Fatal("Error in Response")
 	}
-
+	log.Print("door_open")
 }
