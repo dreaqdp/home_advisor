@@ -35,6 +35,12 @@ func GettingOutEndpoint (w http.ResponseWriter, req *http.Request) {
 	}()
 }
 
+func UserEnterEndpoint (w http.ResponseWriter, req *http.Request) {
+	uid := req.FormValue("uid")
+	database.userLogged(uid)
+	log.Print("User ", database.getNameFromUid(uid), " entered")
+}
+
 func DoorOpenedEndpoint (w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "OK"); err != nil {
 		log.Fatal("Error in Response")
