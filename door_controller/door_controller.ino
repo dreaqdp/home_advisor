@@ -8,8 +8,8 @@
 //server config
 const char* ssid = "marenostrum";
 const char* password = "0123456789";
-const char * host = "192.168.1.119"
-const uint16_t port = 80;
+const char * host = "192.168.1.119";
+const uint16_t port = 3000;
 
 //initial state
 bool in_house = false;
@@ -52,7 +52,7 @@ void setup() {
 
 
 bool getPetition(WiFiClient &cl,  String path){
-  cl->print("GET " + path + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n" + "\r\n");
+  cl.print("GET " + path + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n" + "\r\n");
 }
 
 bool doorOpen(){
@@ -69,31 +69,37 @@ bool doorOpen(){
   duration = pulseIn(echo, HIGH);
   dist = (float)duration/58;
 
-
+  if ( dist <= dist_thresh ){
+    Serial.println("Door is openned");
+  }else{
+    Serial.println("Door is closed");
+  }
   return dist <= dist_thresh; 
 }
 
 void sendInHouse(){
+  Serial.println("User entering home...");
   WiFiClient cl;
-  if (!client.connect(host, port)){
+  if (!cl.connect(host, port)){
     Serial.println("Connection failed");
     return;
   }
 
-  if (client.connected()){
-    getPetition(&cl, "/api/in");
+  if (cl.connected()){
+    getPetition(cl, "/api/in");
   }
 }
 
 void sendOutHouse(){
+  Serial.println("User exiting home...");
   WiFiClient cl;
-  if (!client.connect(host, port)){
+  if (!cl.connect(host, port)){
     Serial.println("Connection failed");
     return;
   }
 
-  if (client.connected()){
-    getPetition(&cl, "/api/out");
+  if (cl.connected()){
+    getPetition(cl, "/api/out");
   }
 }
 
