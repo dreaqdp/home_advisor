@@ -6,13 +6,13 @@ import (
 	"net/http"
 )
 
-func GetHomeEntryPoint (w http.ResponseWriter, req *http.Request) {
+func GetHomeEntryPoint(w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "API is online"); err != nil {
 		log.Fatal("Error in API entry point.")
 	}
 }
 
-func GettingInEndpoint (w http.ResponseWriter, req *http.Request) {
+func GettingInEndpoint(w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "OK"); err != nil {
 		log.Fatal("Error in Response")
 	}
@@ -20,7 +20,7 @@ func GettingInEndpoint (w http.ResponseWriter, req *http.Request) {
 
 }
 
-func GettingOutEndpoint (w http.ResponseWriter, req *http.Request) {
+func GettingOutEndpoint(w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "OK"); err != nil {
 		log.Fatal("Error in Response")
 	}
@@ -35,13 +35,13 @@ func GettingOutEndpoint (w http.ResponseWriter, req *http.Request) {
 	}()
 }
 
-func UserEnterEndpoint (w http.ResponseWriter, req *http.Request) {
-	uid := req.FormValue("uid")
+func UserEnterEndpoint(w http.ResponseWriter, req *http.Request) {
+	uid := req.Header["Uid"][0]
 	database.userLogged(uid)
 	log.Print("User ", database.getNameFromUid(uid), " entered")
 }
 
-func DoorOpenedEndpoint (w http.ResponseWriter, req *http.Request) {
+func DoorOpenedEndpoint(w http.ResponseWriter, req *http.Request) {
 	if _, err := fmt.Fprint(w, "OK"); err != nil {
 		log.Fatal("Error in Response")
 	}

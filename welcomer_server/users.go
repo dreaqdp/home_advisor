@@ -5,10 +5,10 @@ import (
 )
 
 type User struct {
-	uuid string
+	uuid   string
 	pathNn string
-	name string
-	in bool
+	name   string
+	in     bool
 }
 type Users struct {
 	users []User
@@ -31,25 +31,28 @@ func readDatabase() Users {
 		"Guillem",
 		false,
 	}
-	return u;
+	return u
 }
-func (u User) logUser(){
+func (u User) logUser() {
 	log.Print("User: ")
 	log.Print("	Name: ", u.name)
 	log.Print("	uuid: ", u.uuid)
 	log.Print("	pathNn: ", u.pathNn)
 }
 
-func (db Users) logUsers(){
-	for _, u := range db.users{
+func (db Users) logUsers() {
+	for _, u := range db.users {
 		u.logUser()
 	}
 }
 
-func (db Users) userLogged(uid string){
+func (db Users) userLogged(uid string) {
 	for _, u := range db.users {
 		if u.uuid == uid {
 			u.in = !u.in
+			if u.in {
+				say("Welcome " + u.name + ". Come in!")
+			}
 			return
 		}
 	}
@@ -63,4 +66,3 @@ func (db Users) getNameFromUid(uid string) string {
 	}
 	return "Not found"
 }
-
