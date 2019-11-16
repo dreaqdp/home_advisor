@@ -3,8 +3,10 @@
 const char* ssid = "marenostrum";
 const char* password = "0123456789";
 
-const char * host = "192.168.1.11"
+const char * host = "192.168.1.119"
 const uint16_t port = 80;
+
+bool in_house = false;
 
 void setup() {
   Serial.begin(115200);
@@ -36,7 +38,7 @@ bool doorOpen(){
   return true; 
 }
 
-void sendDoorOppenned(){
+void sendInHouse(){
   WiFiClient cl;
   if (!client.connect(host, port)){
     Serial.println("Connection failed");
@@ -44,12 +46,37 @@ void sendDoorOppenned(){
   }
 
   if (client.connected()){
-    getPetition(&cl, "/api/door_open");
+    getPetition(&cl, "/api/in");
   }
 }
+
+void sendOutHouse(){
+  WiFiClient cl;
+  if (!client.connect(host, port)){
+    Serial.println("Connection failed");
+    return;
+  }
+
+  if (client.connected()){
+    getPetition(&cl, "/api/out");
+  }
+}
+
+void delay_s(int s){
+  for(int i = 0; i<s; i++) delay(1000);
+}
+
 void loop() {
   if(doorOpen()){
-    sendDoorOpenned(();
-    delay(100000);
+
+    //user was in house -> exiting
+    if (in_house){
+      sendOutHouse();
+    }else{
+      sendInHouse();
+    }
+
+    in_house = !in_house;
+    delay_s(10);
   }
 }
