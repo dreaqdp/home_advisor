@@ -1,14 +1,17 @@
 #include <ESP8266WiFi.h>
+
+//ultrsound parameters
 #define trig 4
 #define echo 5
 #define dist_thresh 10
- 
+
+//server config
 const char* ssid = "marenostrum";
 const char* password = "0123456789";
-
 const char * host = "192.168.1.119"
 const uint16_t port = 80;
 
+//initial state
 bool in_house = false;
 
 // ultrasound
@@ -18,22 +21,29 @@ float dist, err, ef;
 
 
 void setup() {
+  //Setup ultrasound pins
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+  
+  //Setup serial for log
   Serial.begin(115200);
-    pinMode(trig, OUTPUT);
-    pinMode(echo, INPUT);
   Serial.println();
   Serial.println();
+
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
+  //connect to network
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
+  //wait for wifi connection
   while(WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
 
+  //Log the newtwork info
   Serial.println("");
   Serial.println("WiFi connnected");
   Serial.println("IP address: ");
@@ -46,7 +56,7 @@ bool getPetition(WiFiClient &cl,  String path){
 }
 
 bool doorOpen(){
-      // Clear trig pin
+  // Clear trig pin
   digitalWrite(trig, LOW);
   delayMicroseconds(2);
 
@@ -94,13 +104,15 @@ void delay_s(int s){
 void loop() {
   if(doorOpen()){
 
-    //user was in house -> exiting
     if (in_house){
+      //user was in house -> exiting
       sendOutHouse();
     }else{
+      //user was outside -> is entering
       sendInHouse();
     }
 
+    //state changed
     in_house = !in_house;
     delay_s(10);
   }
