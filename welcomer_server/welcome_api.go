@@ -17,6 +17,7 @@ func GettingInEndpoint (w http.ResponseWriter, req *http.Request) {
 		log.Fatal("Error in Response")
 	}
 	log.Print("In")
+
 }
 
 func GettingOutEndpoint (w http.ResponseWriter, req *http.Request) {
@@ -24,6 +25,14 @@ func GettingOutEndpoint (w http.ResponseWriter, req *http.Request) {
 		log.Fatal("Error in Response")
 	}
 	log.Print("Out")
+	//run concurrently the tts so the response is returned earlier
+	go func() {
+		if isCold() {
+			say("It's cold out there. Make sure to take a jacket!")
+		} else {
+			say("Enjoy your day!")
+		}
+	}()
 }
 
 func DoorOpenedEndpoint (w http.ResponseWriter, req *http.Request) {
