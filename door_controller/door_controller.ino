@@ -1,4 +1,7 @@
 #include <ESP8266WiFi.h>
+#define trig 4
+#define echo 5
+#define dist_thresh 10
  
 const char* ssid = "marenostrum";
 const char* password = "0123456789";
@@ -8,8 +11,16 @@ const uint16_t port = 80;
 
 bool in_house = false;
 
+// ultrasound
+long duration;
+float dist, err, ef;
+
+
+
 void setup() {
   Serial.begin(115200);
+    pinMode(trig, OUTPUT);
+    pinMode(echo, INPUT);
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -35,7 +46,21 @@ bool getPetition(WiFiClient &cl,  String path){
 }
 
 bool doorOpen(){
-  return true; 
+      // Clear trig pin
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+
+  // trigger signal
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig,LOW);
+
+  // Reading the echo pin
+  duration = pulseIn(echo, HIGH);
+  dist = (float)duration/58;
+
+
+  return dist <= dist_thresh; 
 }
 
 void sendInHouse(){
