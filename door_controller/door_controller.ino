@@ -31,8 +31,8 @@
 //server config
 const char* ssid = "marenostrum";
 const char* password = "0123456789";
-//const char * host = "192.168.1.119";
-const char * host = "192.168.1.13";
+const char * host = "192.168.1.119";
+//const char * host = "192.168.1.19";
 const uint16_t port = 3000;
 
 //initial state
@@ -235,6 +235,7 @@ void loop() {
             send_take_keys();
         else
             send_leave_keys();
+        door_time = millis();
     }
     // Halt PICC
     rfid.PICC_HaltA();
